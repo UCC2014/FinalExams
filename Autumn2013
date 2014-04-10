@@ -13,7 +13,7 @@ factorials = 1 : zipWith(\n m -> n*m) factorials [2..]
  
  --Q2B
 atLeast :: Int -> [a] -> Bool
-atLeast n xs = length xs >= n
+atLeast n xs = length xs >= n ( Not right, original given to us )
 
 --Q3A
 from :: Int -> [Int]
