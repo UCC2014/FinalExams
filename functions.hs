@@ -1,6 +1,7 @@
 --assignment 1
 and1 :: [Bool] -> Bool
-and1 bs =  not( null bs) && head bs == True && and1 (tail bs)
+and1 [] = True
+and1 bs =  head bs == True && and1 (tail bs)
 
 or1 :: [Bool] -> Bool
 or1 bs =    not(null bs) && head bs == True || or1 (tail bs)
