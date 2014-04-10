@@ -1,10 +1,10 @@
 --assignment 1
 and1 :: [Bool] -> Bool
 and1 [] = True
-and1 bs =  head bs == True && and1 (tail bs)
+and1 bs =  head bs && and1 (tail bs)
 
 or1 :: [Bool] -> Bool
-or1 bs =    not(null bs) && head bs == True || or1 (tail bs)
+or1 bs = not(null bs) && head bs || or1 (tail bs)
 
 issorted :: [Int] -> Bool
 issorted [] = True
@@ -21,7 +21,7 @@ copies 0 x = []
 copies n x = x : copies (n-1) x
 
 --assignment 2
-applyAll :: [(Int -> Int)] -> Int -> [Int]
+applyAll :: [(a -> a)] -> a -> [a]
 applyAll [] x = []
 applyAll (f:fs) x = f x : applyAll fs x
 
@@ -34,6 +34,10 @@ remove p (x:xs) = if p x then
 --OR
 
 remove1 p = foldr ( \n acc -> if p n then acc else n : acc) [] 
+
+--OR
+remove2 :: (a -> Bool) -> [a] -> [a]
+remove2 p = filter (\x -> not (p x)) 
 
 count:: Eq a => a -> [a] -> Int
 count x [] = 0
@@ -122,7 +126,7 @@ indivisible n = [d | d <- (takeWhile(\x -> x <=
 --OR
 
 primes1 :: [Int]  
-primes1 = 2: [p|p <- [3,5..], isPrime p ]
+primes1 = 2: [ p|p <- [3,5..], isPrime p ]
 
 --isprime n : Checks if n has zero factors
 isPrime :: Int -> Bool
@@ -131,7 +135,7 @@ isPrime n = factors n == []
 --factors n : Checks if values from primes less than squareRoot n are factors
 -- of n
 factors :: Int -> [Int]
-factors n = [f|f<- (takeWhile(\x -> x <= 
+factors n = [ f|f<- (takeWhile(\x -> x <= 
            floor( squareRoot(fromIntegral n) )) primes), mod n f == 0]    
 
 --assignment 5
@@ -141,9 +145,12 @@ integers = 0 : integers' [1..]
 integers' :: [Int] -> [Int]
 integers' (n:ns) = n: -n : integers' ns 
 
+-- OR
+integers1 :: Integral a => [a]
+integers1 = [ (-1)^(mod n 2) * div n 2 | n <- [1 .. ] ]
+
 runs :: Eq a => [a] -> Int
 runs [] = 0
-
 runs ( x: xs) = runs' x xs 1
 
 
@@ -158,7 +165,14 @@ runs' acc ( x : xs ) result =
         if acc == x then
               runs' acc xs result
         else
-              runs' x xs (result + 1)     
+              runs' x xs (result + 1)    
+
+
+--OR
+
+runs1 :: [a] -> Int
+runs1 [] = 0
+runs1 (x:xs) = 1 + runs (snd(break (/=x) xs))
               
 occurences :: Eq a => [a] -> [(a, Int)]
 occurences [] = []

@@ -20,14 +20,23 @@ fil x xs = filter( \n -> x ==n ) xs
 
 --Q2A
 --iterater :: (a -> a) -> a -> [a]
-iterater f x = x : zipWith(\n m -> m*n) (iterater f x)[f,f..]
+iterater f x = x : zipWith (\n m -> m*n) (iterater f x) [f,f..]
+
+-- Alternative solution
+iterateQ :: (a->a) -> a -> [a]
+iterateQ f x = x : iterateQ f (f x)
 
 --Q2C
 --powers :: Int -> [Int]
 powers n = iterater n n
 
+-- Alternative solution
+powersQ :: Num a => a -> [a] 
+powersQ x = iterateQ (\y -> y*x) x
+
 --Q3
 --isPermutation :: (a -> b) -> [b] -> Bool
+isPermutation :: Eq a => (a -> a) -> [a] -> Bool
 isPermutation f [] = True
 isPermutation f (x1:xs) = if (count ( f x1) (x1:xs) == 1) && (distinctPair f x1 xs) then
                           isPermutation f xs
@@ -43,3 +52,7 @@ distinctPair f x (x1:xs) = if (f x) /= (f x1) then
                           
 --Q4
 --inverse not done
+-- Not sure about this one. I think inverse should just give the original list back, which is what
+-- you take in as s, but that seems too simple. Maybe I'm reading it wrong. -Henry
+inverse :: Eq a => (a -> a) -> [a] -> [a]
+inverse f s = if isPermutation f s then s else error "uh oh"
