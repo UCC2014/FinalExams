@@ -49,10 +49,18 @@ distinctPair f x (x1:xs) = if (f x) /= (f x1) then
                           distinctPair f x xs
                           else
                           False
+
+--Alternative solution:
+isPermutation2 :: Eq a => (a -> a) -> [a] -> Bool
+isPermutation2 f xs = all (`elem` xs) (map f xs)
+                        && length (remdups (map f xs)) == length xs
                           
---Q4
---inverse not done
--- Not sure about this one. I think inverse should just give the original list back, which is what
--- you take in as s, but that seems too simple. Maybe I'm reading it wrong. -Henry
-inverse :: Eq a => (a -> a) -> [a] -> [a]
-inverse f s = if isPermutation f s then s else error "uh oh"
+--Q4S
+-- I think I have figured out what he means and this should do it.
+-- A permutation is a unary function that returns an item so its inverse also returns an item.
+-- -JamesT
+inverse :: Eq a => (a -> a) -> [a] -> a -> a
+inverse f (x:xs) y
+    | (f x == y) = x
+    | otherwise  = inverse f xs y
+inverse _ [] _ = error "Inverse not found."
