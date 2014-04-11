@@ -1,4 +1,8 @@
---summer 2012
+--Autumn 2012
+
+--Q1
+
+--(a)
 drop1 :: Int -> [a] -> [a]
 drop1 n xs | n == 0 = xs
           | n < 0 = xs
@@ -10,16 +14,20 @@ remove n xs acc = if n == acc then
                    xs
                    else
                    remove n (tail xs) (acc +1)
+
+--(b)
 dropWhile1 :: (a -> Bool) -> [a] -> [a]
 dropWhile1 p [] = []                   
 dropWhile1 p (x:xs) = if p x then 
                       dropWhile1 p xs
                       else
                       x : dropWhile1 p xs
+
+--(c)
 fibonacci :: [Int]                      
 fibonacci  = 0 : 1 : zipWith( + ) fibonacci (tail fibonacci)
 
---Q2 ALREADY DONE IN 2013 PAPER
+--Q2 ALREADY DONE IN SUMMER 2013 PAPER
 
 --Q3A
 zipWith1 :: (a -> a -> a) -> [a] -> [a] -> [a]
