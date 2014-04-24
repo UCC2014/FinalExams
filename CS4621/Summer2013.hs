@@ -1,3 +1,5 @@
+import Graph -- For Q2
+
 --Q1
 
 --(a)
@@ -15,8 +17,21 @@ append EmptyList ys = ys
 append (L x xs) ys  = L x (append xs ys)
 
 --Q2
+data Search = BFS | DFS
 
---Not done yet
+join :: [ a ] -> [ a ] -> Search -> [ a ]
+join xs ys search = case search of
+                       BFS -> xs ++ ys
+                       DFS -> ys ++ xs
+
+reach :: Graph -> Node -> Search -> [ Node ]
+reach g s search = reach' g search [ ] [ s ]
+
+reach' :: Graph -> Search -> [ Node ] -> [ Node ] -> [ Node ]
+reach' _ _  _ [ ] = [ ]
+reach' g search seen ( n : ns )
+    | elem n seen = reach' g search seen ns
+    | otherwise   = n : reach' g search ( n : seen ) ( join ns ( neighbours n g ) search )
 
 --Q3
 
