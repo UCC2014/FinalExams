@@ -33,6 +33,12 @@ reach' g search seen ( n : ns )
     | elem n seen = reach' g search seen ns
     | otherwise   = n : reach' g search ( n : seen ) ( join ns ( neighbours n g ) search )
 
+-- Tested with these examples:
+-- map n2s (reach g1 (s2n "A") BFS)
+--   > ["A","B","C","E","D","F","G"]
+-- map n2s (reach g1 (s2n "A") DFS)
+--   > ["A","B","D","E","C","F","G"]
+
 --Q3
 
 --(a)

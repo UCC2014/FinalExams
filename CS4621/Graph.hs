@@ -1,6 +1,11 @@
 module Graph ( Graph, Node, Edge,
+               -- Standard Graph
                emptyGraph, nodes, edges, s2n, n2s, ns2e, e2ns,
-               insertNode, insertEdge, outEdges, neighbours ) where
+               insertNode, insertEdge, outEdges,
+               -- GRAPH additions
+               graph, ugraph, outNeighbours, neighbours, start, finish,
+               -- Samples
+               g1, g2) where
 
 --------------------------------------------------------------------------------
 -- I N T E R F A C E  :  P U B L I C
@@ -78,9 +83,52 @@ outEdges :: Node -> Graph -> [ Edge ]
 
 --------------------------------------------------------------------------------
 
--- neighbours n g : a list of the nodes reachable along a single out-edge from 
+-- graph n g : the directed graph formed from
+--                all nodes corresponding to
+--                   the list of strings 'sns'
+--                all edges corresponding to
+--                   the list of 2-tuples of strings 'ses'
+graph :: [ String ] -> [ ( String, String ) ] -> Graph
+
+--------------------------------------------------------------------------------
+
+-- ugraph n g : the undirected graph formed from
+--                 all nodes corresponding to
+--                    the list of strings 'sns'
+--                 all edges corresponding to
+--                    the list of 2-tuples of strings 'ses'
+ugraph :: [ String ] -> [ ( String, String ) ] -> Graph
+
+--------------------------------------------------------------------------------
+
+-- outNeighbours n g : a list of the nodes reachable along a single out-edge from 
 --                  node 'n' in graph 'g'. For use in 2013 Summer Q2
+outNeighbours :: Node -> Graph -> [ Node ]
+
+--------------------------------------------------------------------------------
+
+-- neighbours n g : alias of outNeighbours
 neighbours :: Node -> Graph -> [ Node ]
+
+--------------------------------------------------------------------------------
+
+-- start e : the start node of edge 'e'
+start :: Edge -> Node
+
+--------------------------------------------------------------------------------
+
+-- finish e : the finish node of edge 'e'
+finish :: Edge -> Node
+
+--------------------------------------------------------------------------------
+
+-- g1 : sample undirected graph
+g1 :: Graph
+
+--------------------------------------------------------------------------------
+
+-- g1 : sample directed graph
+g2 :: Graph
 
 --------------------------------------------------------------------------------
 
@@ -144,6 +192,69 @@ outEdges n ( G _ es ) = [ e | e <- es, fst ( e2ns e ) == n ]
 
 --------------------------------------------------------------------------------
 
-neighbours n g = [ snd ( e2ns e ) | e <- outEdges n g ]
+--------------------------------------------------------------------------------
+-- GRAPH ADT
+--------------------------------------------------------------------------------
+
+graph sns ses = insertEdges [ ns2e ( s2n s1, s2n s2 ) | ( s1, s2 ) <- ses ]
+                            ( insertNodes [s2n s | s <- sns ] emptyGraph )
+
+--------------------------------------------------------------------------------
+
+-- insertNodes ns g : the graph formed by inserting all nodes in the list 'ns'
+--                    into graph 'g'
+
+insertNodes :: [ Node ] -> Graph -> Graph
+insertNodes ns g = foldr insertNode g ns
+
+--------------------------------------------------------------------------------
+
+-- insertEdges es g : the graph formed by inserting all edges in the list 'es'
+--                    into graph 'g'
+
+insertEdges :: [ Edge ] -> Graph -> Graph
+insertEdges es g = foldr insertEdge g es
+
+--------------------------------------------------------------------------------
+
+ugraph sns ses = graph sns ( foldr ( \( s, f ) -> \acc ->
+                                        ( s, f ) : ( f, s ) : acc )
+                                   [ ]
+                                   ses )
+
+--------------------------------------------------------------------------------
+
+outNeighbours n g = [ finish e | e <- outEdges n g ]
+
+--------------------------------------------------------------------------------
+
+neighbours = outNeighbours
+
+--------------------------------------------------------------------------------
+
+start e = fst ( e2ns e )
+
+--------------------------------------------------------------------------------
+
+finish e = snd ( e2ns e )
+
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+-- Samples
+--------------------------------------------------------------------------------
+
+g1 = ugraph [ "A", "B", "C", "D", "E", "F", "G", "H"]
+            [ ( "A", "B" ), ( "A", "C" ), ( "A", "E" ),
+              ( "B", "D" ), ( "B", "E" ),
+              ( "C", "F" ), ( "C", "G" ),
+              ( "D", "E" ),
+              ( "F", "G" ) ]
+
+--------------------------------------------------------------------------------
+
+g2 = graph [ "0", "+1", "-1", "+2", "-2", "+3", "-3", "+4", "-4"]
+           [ ( "0", "+1" ), ( "+1", "+2" ), ( "+2", "+3" ), ( "+3", "+4" ),
+             ( "0", "-1" ), ( "-1", "-2" ), ( "-2", "-3" ), ( "-3", "-4" ) ]
 
 --------------------------------------------------------------------------------
