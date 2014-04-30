@@ -30,7 +30,7 @@ fibonacci  = 0 : 1 : zipWith( + ) fibonacci (tail fibonacci)
 --Q2 ALREADY DONE IN SUMMER 2013 PAPER
 
 --Q3A
-zipWith1 :: (a -> a -> a) -> [a] -> [a] -> [a]
+zipWith1 :: (a -> b -> c) -> [a] -> [b] -> [c]
 zipWith1 f [] ys = []
 zipWith1 f xs [] = []
 zipWith1 f (x:xs) (y:ys) = f x y : zipWith1 f xs ys  
