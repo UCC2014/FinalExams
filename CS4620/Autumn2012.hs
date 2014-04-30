@@ -21,7 +21,7 @@ dropWhile1 p [] = []
 dropWhile1 p (x:xs) = if p x then 
                       dropWhile1 p xs
                       else
-                      x : dropWhile1 p xs
+                      x : xs
 
 --(c)
 fibonacci :: [Int]                      
